@@ -3,6 +3,7 @@ package com.teach.challenge.domain.models.user;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public record RegisterUserDataDTO(
         @NotNull(message = "UserName não informado")
@@ -14,6 +15,8 @@ public record RegisterUserDataDTO(
         String name,
         @NotNull(message = "Telefone não informado")
 
+        @NotNull(message = "Telefone não informado")
+        @Pattern(regexp = "\\d{8,}", message = "Telefone deve ter no mínimo 6 dígitos")
         String phone,
         @NotBlank(message = "Email não informado")
         @Email(message = "Formato de email incorreto")
@@ -22,7 +25,10 @@ public record RegisterUserDataDTO(
 
         @NotBlank(message = "URL da Imagem do Usuário não informada")
 
-        String profileLink
+        String profileLink,
+
+        @NotBlank(message = "Descrição do usuário não informada")
+        String description
 ) {
 
 

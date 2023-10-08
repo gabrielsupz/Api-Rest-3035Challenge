@@ -16,7 +16,8 @@ public record UpdateUserDataDTO(
 
 
 
-        String profileLink
+        String profileLink,
+        String description
 
 
 

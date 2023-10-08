@@ -30,7 +30,7 @@ public class Post {
     private String photoLink;
     private String videoLink;
     private Boolean postIsPrivate;
-
+private Integer likes;
     @ManyToOne( fetch = FetchType.LAZY)
     private User postCreator;
 
@@ -40,6 +40,7 @@ public class Post {
         this.updatedAt = LocalDate.now();
         this.title = d.title();
         this.description = d.description();
+        this.likes = 0;
         if(!d.photoLink().isEmpty()){
             this.photoLink = d.photoLink();
         }
@@ -78,6 +79,11 @@ public class Post {
 
 
     }
+
+    public void increaseLikes() {
+        likes++;
+    }
+
 
     public void delete() {
         this.deleted = true;

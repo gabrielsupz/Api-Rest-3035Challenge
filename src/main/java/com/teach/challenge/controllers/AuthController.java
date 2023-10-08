@@ -2,6 +2,7 @@ package com.teach.challenge.controllers;
 
 
 import com.teach.challenge.domain.models.user.User;
+import com.teach.challenge.domain.repositorys.UserRepository;
 import com.teach.challenge.infra.security.DTOs.DadosTokenJWT;
 import com.teach.challenge.infra.security.DTOs.LoginDataDTO;
 import com.teach.challenge.infra.security.services.AuthService;
@@ -15,10 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/login")
@@ -33,19 +32,20 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+@Autowired
+    private UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<DadosTokenJWT> login(@RequestBody @Valid LoginDataDTO data) {
 
+ UserDetails userDetails =  userRepository.findByEmail(data.email());
 
         Authentication authentication = this.authenticationManager.
-                authenticate(new UsernamePasswordAuthenticationToken(data.userName(), data.password()));
+                authenticate(new UsernamePasswordAuthenticationToken(userDetails.getUsername(), data.password()));
 
         var user = (User) authentication.getPrincipal();
 
-//        if(userService.userIsDeleted(user)){
-//
-//        }
+
 
         var token =  tokenService.gerarToken(user);
 

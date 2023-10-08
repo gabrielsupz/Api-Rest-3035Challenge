@@ -14,10 +14,12 @@ String author,
         LocalDate createdAt,
         LocalDate updatedAt,
 
+Integer likes,
+
 Boolean postIsPrivate
                                     ) {
     public DetailPostDataDTO(Post p) {
-        this(p.getPostCreator().getUserName(), p.getId(), p.getTitle(), p.getDescription(), p.getPhotoLink(), p.getVideoLink(), p.getCreatedAt(), p.getUpdatedAt(), p.getPostIsPrivate());
+        this(p.getPostCreator().getUserName(), p.getId(), p.getTitle(), p.getDescription(), p.getPhotoLink(), p.getVideoLink(), p.getCreatedAt(), p.getUpdatedAt(),p.getLikes(), p.getPostIsPrivate());
     }
 
 

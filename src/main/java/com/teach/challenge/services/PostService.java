@@ -81,6 +81,23 @@ public class PostService {
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
+
+
+    // Add likes a um determinado post
+    public ResponseEntity<DetailPostDataDTO> increaseLikes(HttpServletRequest request, @Valid UpdatePostDTO data) {
+        Optional<Post> post = postRepository.findById(data.id());
+
+        if(post.isPresent()){
+            Post p = post.get();
+            p.increaseLikes();
+
+            return ResponseEntity.ok(new DetailPostDataDTO(p));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
+
 // O  user só pode deletar um de seus próprios posts"
 
     public ResponseEntity<?> delete(HttpServletRequest request, Long postId) {
@@ -124,4 +141,6 @@ public class PostService {
         return ResponseEntity.ok(page);
 
     }
+
+
 }

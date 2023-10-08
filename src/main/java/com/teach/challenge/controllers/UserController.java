@@ -1,6 +1,8 @@
 package com.teach.challenge.controllers;
 
 
+
+import com.teach.challenge.domain.models.user.FriendUserDataDTO;
 import com.teach.challenge.domain.models.user.DetailUserDataDTO;
 import com.teach.challenge.domain.models.user.UpdateUserDataDTO;
 import com.teach.challenge.domain.models.user.RegisterUserDataDTO;
@@ -60,6 +62,39 @@ public class UserController {
 
 
     }
+
+    @PostMapping("/friends")
+    @Transactional
+    public ResponseEntity<?> addFriend(HttpServletRequest request, @RequestBody @Valid FriendUserDataDTO dados) {
+
+
+        return userService.addFriend(request,dados);
+
+
+    }
+
+
+    @PutMapping("/friends")
+    @Transactional
+    public ResponseEntity<?> removeFriend(HttpServletRequest request, @RequestBody @Valid FriendUserDataDTO dados) {
+
+
+        return userService.removeFriend(request,dados);
+
+
+    }
+
+    @GetMapping("/friends")
+    @Transactional
+    public ResponseEntity<?> getFriends(HttpServletRequest request,@PageableDefault(size = 5) Pageable pageble) {
+
+
+        return userService.getFriends(request,pageble);
+
+
+    }
+
+
 
     @GetMapping
     public ResponseEntity<Page<DetailUserDataDTO>> listUser(@PageableDefault(size = 5) Pageable pageble) {

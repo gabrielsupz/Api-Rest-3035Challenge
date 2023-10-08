@@ -44,6 +44,13 @@ public class PostController {
 
     }
 
+    @PutMapping("/likes")
+    @Transactional
+    public ResponseEntity<DetailPostDataDTO> increaseLikes(HttpServletRequest request,@RequestBody @Valid UpdatePostDTO data){
+
+        return postService.increaseLikes(request, data);
+
+    }
 
     @DeleteMapping("/{id}")
     @Transactional

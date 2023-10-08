@@ -40,11 +40,33 @@ public class User implements UserDetails {
     private LocalDate updatedAt;
     private String email;
     private String phone;
+    private String description;
     private String profileLink;
     @OneToMany(mappedBy = "postCreator", cascade = CascadeType.ALL)
     private List<Post> posts = new ArrayList();
 
 
+    @ManyToMany
+    @JoinTable(
+            name = "user_friends",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "friend_id")
+    )
+    private List<User> friends = new ArrayList<>();
+
+    public void addFriend(User friend) {
+        friends.add(friend);
+
+        
+    }
+
+    public List<User> getFriends() {
+        return friends;
+    }
+
+    public void removeFriend(User friend) {
+        friends.remove(friend);
+    }
 
     public User(RegisterUserDataDTO d) {
         this.password = new BCryptPasswordEncoder().encode(d.password());
@@ -59,6 +81,7 @@ public class User implements UserDetails {
         this.userName = d.userName();
 
         this.profileLink = d.profileLink();
+        this.description = d.description();
 
     }
 
@@ -210,6 +233,11 @@ public class User implements UserDetails {
         }
         if (!(dados.profileLink() == null)) {
             this.profileLink = dados.profileLink();
+            this.updatedAt = LocalDate.now();
+        }
+
+        if (!(dados.description() == null)) {
+            this.description = dados.description();
             this.updatedAt = LocalDate.now();
         }
 
