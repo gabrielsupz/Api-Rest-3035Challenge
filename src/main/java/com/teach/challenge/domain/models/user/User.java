@@ -244,10 +244,24 @@ public class User implements UserDetails {
 
     }
 
+    public long getActiveFriendCount() {
+        return friends.stream()
+                .filter(friend -> !friend.getDeleted())
+                .count();
+    }
+
+
+    public long getActivePostCount() {
+        return posts.stream()
+                .filter(post -> !post.getDeleted())
+                .count();
+    }
     public void delete() {
 
         this.deleted = true;
 
 
     }
+
+
 }

@@ -83,6 +83,9 @@ private Integer likes;
     public void increaseLikes() {
         likes++;
     }
+    public void decreaseLikes() {
+        likes--;
+    }
 
 
     public void delete() {

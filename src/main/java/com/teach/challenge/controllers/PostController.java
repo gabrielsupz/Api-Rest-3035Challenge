@@ -2,6 +2,7 @@ package com.teach.challenge.controllers;
 
 import com.teach.challenge.domain.models.post.DetailPostDataDTO;
 import com.teach.challenge.domain.models.post.DataPostDataDTO;
+import com.teach.challenge.domain.models.post.GetAuthorDTO;
 import com.teach.challenge.domain.models.post.UpdatePostDTO;
 import com.teach.challenge.services.PostService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -44,6 +46,7 @@ public class PostController {
 
     }
 
+
     @PutMapping("/likes")
     @Transactional
     public ResponseEntity<DetailPostDataDTO> increaseLikes(HttpServletRequest request,@RequestBody @Valid UpdatePostDTO data){
@@ -51,6 +54,16 @@ public class PostController {
         return postService.increaseLikes(request, data);
 
     }
+
+    @PutMapping("/likes/remove")
+    @Transactional
+    public ResponseEntity<DetailPostDataDTO> removeLikes(HttpServletRequest request,@RequestBody @Valid UpdatePostDTO data){
+
+        return postService.removeLikes(request, data);
+
+    }
+
+
 
     @DeleteMapping("/{id}")
     @Transactional
@@ -71,6 +84,32 @@ public class PostController {
 
 
     }
+
+
+
+
+    @GetMapping("/user/{id}")
+    @Transactional
+    public ResponseEntity<Page<DetailPostDataDTO>> listPostUserById(@PathVariable Long id, @PageableDefault(size = 6) Pageable pageble){
+
+
+        return postService.listPostUserById(id, pageble);
+
+    }
+
+
+
+    @GetMapping("/friends")
+    @Transactional
+    public ResponseEntity<Page<DetailPostDataDTO>> listFriendsPostsByUser(HttpServletRequest request, @PageableDefault(size = 5) Pageable pageble){
+
+
+        return postService.listFriendsPostsByUser(request,pageble);
+
+    }
+
+
+
 
     @GetMapping
     public ResponseEntity<Page<DetailPostDataDTO>> listPostsByUser(HttpServletRequest request, @PageableDefault(size = 5) Pageable pageble){

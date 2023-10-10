@@ -2,10 +2,8 @@ package com.teach.challenge.controllers;
 
 
 
-import com.teach.challenge.domain.models.user.FriendUserDataDTO;
-import com.teach.challenge.domain.models.user.DetailUserDataDTO;
-import com.teach.challenge.domain.models.user.UpdateUserDataDTO;
-import com.teach.challenge.domain.models.user.RegisterUserDataDTO;
+import com.teach.challenge.domain.models.user.*;
+import com.teach.challenge.domain.repositorys.UserRepository;
 import com.teach.challenge.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +27,8 @@ public class UserController {
     private UserService userService;
     @Autowired
     private AuthController authController;
+
+
 
     @PostMapping
     public ResponseEntity<DetailUserDataDTO> cadastrar(@RequestBody @Valid RegisterUserDataDTO dados, UriComponentsBuilder uriBuilder) {
@@ -44,7 +45,20 @@ public class UserController {
         return userService.detail(id);
     }
 
-    @PutMapping("/update")
+
+
+
+    @GetMapping("/authuser")
+    public ResponseEntity<Object> getAuthUser(HttpServletRequest request) {
+
+
+        return userService.getAuthUser(request);
+    }
+
+
+
+
+        @PutMapping("/update")
     @Transactional
     public ResponseEntity<DetailUserDataDTO> update(HttpServletRequest request, @RequestBody @Valid UpdateUserDataDTO dados) {
 
@@ -86,7 +100,7 @@ public class UserController {
 
     @GetMapping("/friends")
     @Transactional
-    public ResponseEntity<?> getFriends(HttpServletRequest request,@PageableDefault(size = 5) Pageable pageble) {
+    public ResponseEntity<?> getFriends(HttpServletRequest request,@PageableDefault(size = 4) Pageable pageble) {
 
 
         return userService.getFriends(request,pageble);
@@ -103,6 +117,8 @@ public class UserController {
         return userService.listUsers(pageble);
 
     }
+
+
 
 
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -56,6 +57,11 @@ public class UserService {
 
         return ResponseEntity.notFound().build();
     }
+
+
+
+
+
 
 //OBS: O id do user a sofrer o update será pego do token de autenticação
     public ResponseEntity<DetailUserDataDTO> update(HttpServletRequest request, @RequestBody @Valid UpdateUserDataDTO dados) {
@@ -152,8 +158,20 @@ public class UserService {
     }
 
 
-  
+    public ResponseEntity<Object> getAuthUser(HttpServletRequest request) {
+        var tokenJWT = tokenService.retriveToken(request);
+        Long id = tokenService.getID(tokenJWT);
+        Optional<User> user = userRepository.findById(id);
 
 
-    
+        if (user.isPresent()) {
+            User u = user.get();
+            return ResponseEntity.ok(new DetailUserDataDTO(u));
+        }
+
+        return ResponseEntity.notFound().build();
+
+
+
+    }
 }

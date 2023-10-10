@@ -1,9 +1,6 @@
 package com.teach.challenge.services;
 
-import com.teach.challenge.domain.models.post.DetailPostDataDTO;
-import com.teach.challenge.domain.models.post.DataPostDataDTO;
-import com.teach.challenge.domain.models.post.Post;
-import com.teach.challenge.domain.models.post.UpdatePostDTO;
+import com.teach.challenge.domain.models.post.*;
 import com.teach.challenge.domain.models.user.User;
 import com.teach.challenge.domain.repositorys.PostRepository;
 import com.teach.challenge.domain.repositorys.UserRepository;
@@ -97,6 +94,20 @@ public class PostService {
     }
 
 
+    public ResponseEntity<DetailPostDataDTO> removeLikes(HttpServletRequest request, @Valid UpdatePostDTO data) {
+        Optional<Post> post = postRepository.findById(data.id());
+
+        if(post.isPresent()){
+            Post p = post.get();
+            p.decreaseLikes();
+
+            return ResponseEntity.ok(new DetailPostDataDTO(p));
+        }
+        return ResponseEntity.badRequest().build();
+    }
+
+
+
 
 // O  user só pode deletar um de seus próprios posts"
 
@@ -143,4 +154,33 @@ public class PostService {
     }
 
 
+    public ResponseEntity<Page<DetailPostDataDTO>> listFriendsPostsByUser(HttpServletRequest request, Pageable pageble) {
+
+        User user = getUserLogged(request);
+        Page<DetailPostDataDTO> page = postRepository.findAllActivePostsByFriendUserId(user.getId(), pageble).map(p -> new DetailPostDataDTO(p));
+
+
+        return ResponseEntity.ok(page);
+
+    }
+
+    public ResponseEntity<Page<DetailPostDataDTO>> listPostUserById(Long id, Pageable pageable) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            Page<Post> page = postRepository.findAllByPostCreatorAndDeletedFalse(user, pageable);
+            Page<DetailPostDataDTO> pagePost = page.map(DetailPostDataDTO::new);
+            return ResponseEntity.ok(pagePost);
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+
+
+
 }
+
+
+
+
