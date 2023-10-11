@@ -1,5 +1,6 @@
 package com.teach.challenge.infra.security;
 
+import com.teach.challenge.domain.models.user.User;
 import com.teach.challenge.domain.repositorys.UserRepository;
 import com.teach.challenge.infra.security.services.TokenService;
 import jakarta.servlet.FilterChain;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 public class SecurityFilter extends OncePerRequestFilter {
@@ -30,10 +32,15 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (tokenJWT != null) {
             var subject = tokenService.getSubject(tokenJWT);
 
-            var user = userRepository.findByUserName(subject);
-            var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
+            Optional<User> user = userRepository.findById(Long.parseLong(subject));
+
+            if(user.isPresent()){
+                User u = user.get();
+                var authentication =   new UsernamePasswordAuthenticationToken(u, null, u.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+            }
+
 
         filterChain.doFilter(request, response);
 

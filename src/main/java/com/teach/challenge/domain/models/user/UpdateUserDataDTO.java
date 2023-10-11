@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Pattern;
 public record UpdateUserDataDTO(
 
         String userName,
-        @Pattern(regexp = "\\d{5,20}")
+        @Pattern(regexp = "\\d{3,20}")
         String password,
         String name,
 

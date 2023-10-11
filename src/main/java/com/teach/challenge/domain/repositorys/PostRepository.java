@@ -23,4 +23,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByPostCreatorAndDeletedFalse(User user, Pageable pageable);
 
 
+    @Query("SELECT p FROM Post p WHERE p.deleted = false ORDER BY p.createdAt DESC")
+    Page<Post> findAllUndeletedPosts(Pageable pageable);
+
+
 }

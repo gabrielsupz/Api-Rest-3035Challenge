@@ -101,10 +101,10 @@ public class PostController {
 
     @GetMapping("/friends")
     @Transactional
-    public ResponseEntity<Page<DetailPostDataDTO>> listFriendsPostsByUser(HttpServletRequest request, @PageableDefault(size = 5) Pageable pageble){
+    public ResponseEntity<Page<DetailPostDataDTO>> listPosts(HttpServletRequest request, @PageableDefault(size = 5) Pageable pageble){
 
 
-        return postService.listFriendsPostsByUser(request,pageble);
+        return postService.listPosts(request,pageble);
 
     }
 

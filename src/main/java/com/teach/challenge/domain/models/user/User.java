@@ -219,7 +219,7 @@ public class User implements UserDetails {
             this.updatedAt = LocalDate.now();
         }
         if (!(dados.password() == null)) {
-            this.password = dados.password();
+            this.password = new BCryptPasswordEncoder().encode(dados.password());
             this.updatedAt = LocalDate.now();
         }
         if (!(dados.email() == null)) {

@@ -66,6 +66,17 @@ public class UserController {
 
 
     }
+    @GetMapping("/friend/{id}")
+    @Transactional
+    public ResponseEntity<UserFriendResponseDTO> userIsFriend(HttpServletRequest request,@PathVariable Long id) {
+
+
+        return userService.userIsFriend(request,id);
+
+
+    }
+
+
 
     @DeleteMapping("/delete")
     @Transactional

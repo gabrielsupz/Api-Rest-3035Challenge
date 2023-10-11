@@ -7,19 +7,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -174,4 +169,28 @@ public class UserService {
 
 
     }
+
+    public ResponseEntity<UserFriendResponseDTO> userIsFriend(HttpServletRequest request, @RequestBody Long possibleFriendId) {
+
+
+        Optional<User> pf = userRepository.findById(possibleFriendId);
+        var tokenJWT = tokenService.retriveToken(request);
+        Long id = tokenService.getID(tokenJWT);
+        Optional<User> user = userRepository.findById(id);
+
+        if (user.isPresent() && pf.isPresent()) {
+            User currentUser = user.get();
+            User possibleFriendUser = pf.get();
+
+            boolean isFriend = currentUser.getFriends().contains(possibleFriendUser);
+
+
+
+
+            return ResponseEntity.ok(   new UserFriendResponseDTO(isFriend));
+        }
+
+        return ResponseEntity.notFound().build();
+    }
+
 }

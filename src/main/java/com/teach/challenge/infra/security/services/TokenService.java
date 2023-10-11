@@ -15,7 +15,7 @@ import java.time.ZoneOffset;
 public class TokenService {
     public String gerarToken(User user) {
         return JWT.create().withIssuer("teach")
-                .withSubject(user.getUserName())
+                .withSubject(String.valueOf( user.getId()))
                 .withClaim("id", user.getId())
                 .withExpiresAt(LocalDateTime.now()
                         .plusMinutes(60)

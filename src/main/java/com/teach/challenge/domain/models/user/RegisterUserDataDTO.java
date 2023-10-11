@@ -9,7 +9,7 @@ public record RegisterUserDataDTO(
         @NotNull(message = "UserName não informado")
         String userName,
         @NotBlank(message = "Senha não pode estar vazia")
-
+        @Pattern(regexp = "\\d{3,20}", message = "Senha deve ter entre 3 e 20 digitos")
         String password,
         @NotNull(message = "Nome não informado")
         String name,

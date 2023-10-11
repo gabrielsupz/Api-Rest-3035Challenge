@@ -154,10 +154,10 @@ public class PostService {
     }
 
 
-    public ResponseEntity<Page<DetailPostDataDTO>> listFriendsPostsByUser(HttpServletRequest request, Pageable pageble) {
+    public ResponseEntity<Page<DetailPostDataDTO>> listPosts(HttpServletRequest request, Pageable pageble) {
 
-        User user = getUserLogged(request);
-        Page<DetailPostDataDTO> page = postRepository.findAllActivePostsByFriendUserId(user.getId(), pageble).map(p -> new DetailPostDataDTO(p));
+
+        Page<DetailPostDataDTO> page = postRepository.findAllUndeletedPosts( pageble).map(p -> new DetailPostDataDTO(p));
 
 
         return ResponseEntity.ok(page);
